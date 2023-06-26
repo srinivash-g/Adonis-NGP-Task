@@ -26,7 +26,7 @@ Route.get('/', async () => {
   return { hello: 'world' }
 })
 
-
+Route.group(()=>{
 Route.get('/insertstudent','StudentInfoAddsController.create')
 
 Route.get('/Displayall','StudentInfoDisplaysController.fetchall')
@@ -44,6 +44,12 @@ Route.patch('/updatedetails/:id','StudentInfoDisplaysController.update')
 Route.get('/deptadd','DepartmentDetailsController.addDepartment')
 
 Route.get('/getall','DepartmentDetailsController.displayAllDetails')
+
+Route.patch('/updatedept/:id','DepartmentDetailsController.update')
+
+Route.delete('/deletedept/:id','DepartmentDetailsController.delete')
+
+}).middleware('Authenthicate')
 
 
 

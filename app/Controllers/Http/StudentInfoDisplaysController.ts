@@ -18,6 +18,10 @@ public async fetchall({response}:HttpContextContract) {
 //Display only specific id
     public async findById({response,params}:HttpContextContract) {    
         const details=await Student.findBy("stud_id",params.id)
+        // if(isNaN(params.id)){
+        //     return response.notFound({message:'Student ID details found'})
+        // }
+        // else 
         if(details){
         return response.accepted({data:details,message:'Student ID details found'})
         }
@@ -78,7 +82,7 @@ public async fetchall({response}:HttpContextContract) {
    details_update.roll_no=payload.roll_no
    await details_update.save()
 
-   return response.ok({data:details_update,message:'Record updated deleted'})
+   return response.ok({data:details_update,message:'Record updated Successfully'})
    }
    else {
     return response.notFound({message:'The Student ID mentioned is not available'})

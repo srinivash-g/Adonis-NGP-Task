@@ -16,16 +16,45 @@ export default class DepartmentDetailsController {
     department.depName = payload.depname
     
     await department.save()
-    return response.created({message:'Student Record has been inserted ',
+    return response.created({message:'Department Record has been inserted ',
                              data:department})
                              
 
     }
+    public async update({request,response,params}:HttpContextContract) {   
+      const newValidator=schema.create({
+       depname:schema.string(),
+     })
+     const payload=await request.validate({schema:newValidator})
+     //return payload 
+     const details_update = await Department.findOrFail(params.id)
+     if(details_update){
+     details_update.depName=payload.depname
+     await details_update.save()
+     return response.ok({data:details_update,message:'Record updated successfully'})
+     }
+     else {
+      return response.notFound({message:'The Department ID mentioned is not available'})
+     }  
+  }
+  public async delete({response,params}:HttpContextContract) {   
+    const record=await Department.findBy("dep_id",params.id)
+     if(record){
+     record.delete()
+    // return 'Deleted ';
+     return response.ok({data:record,message:'Record Successfully deleted'})
+    }
+    
+    else{
+     return response.notFound({message:'The Department ID mentioned is not available'})
+    }       
+    
+}
 
-    public async displayAllDetails() { 
-    const student = await Student.query()
 
     
+    public async displayAllDetails() { 
+    const student = await Student.query()  
     .select('departments.dep_name')
     .select('students.*')
     .from('students')
@@ -40,18 +69,7 @@ export default class DepartmentDetailsController {
       dept_name: s.$extras.dep_name
     };
   });
-  
-
-  return result
-  
- 
-
-
-
-
-
-
-
+return result
 }
 }
 
