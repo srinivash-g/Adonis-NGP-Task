@@ -7,7 +7,8 @@ export default class StudentInfoAddsController {
         public async create({request,response}:HttpContextContract) {   
             const newValidator=schema.create({
              stud_name:schema.string(),
-             roll_no:schema.number()
+             roll_no:schema.number(),
+             dept_id:schema.number()
            })
            const messages={'*': (field, rule) => {return `${rule} validation error on ${field}`}}
            const payload=await request.validate({schema:newValidator,messages})

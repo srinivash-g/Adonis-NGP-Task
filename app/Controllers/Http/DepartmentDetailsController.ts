@@ -50,6 +50,16 @@ export default class DepartmentDetailsController {
     }       
     
 }
+public async fetchallDept({response}:HttpContextContract) {
+  const details=await Department.all()
+  if(details){
+  return response.ok({data:details,message:'Fetched all data'})
+  }
+  else{
+      return response.ok({message:'No Record available'})
+      
+  }
+  }
 
 
     
@@ -59,6 +69,7 @@ export default class DepartmentDetailsController {
     .select('students.*')
     .from('students')
   .join('departments', 'students.dept_id', '=', 'departments.dep_id')
+  console.log(student);
 
   const result = student.map((s) => {
     return {
@@ -71,5 +82,87 @@ export default class DepartmentDetailsController {
   });
 return result
 }
+public async displayAllDetailsbyId({params}:HttpContextContract) { 
+  const student = await Student.query()  
+  .select('departments.dep_name')
+  .select('students.*')
+  .from('students')
+.join('departments', 'students.dept_id', '=', 'departments.dep_id')
+.where('students.dept_id', params.id);
+console.log(student);
+
+const result = student.map((s) => {
+  return {
+    stud_id: s.$attributes.stud_id,
+    stud_name: s.$attributes.stud_name,
+    roll_no: s.$attributes.roll_no,
+    dept_id: s.$attributes.dept_id,
+    dept_name: s.$extras.dep_name
+  };
+});
+return result
+}
+
+public async displayAllDetailsbySearch({ params, request, response }: HttpContextContract) {
+  const { searchQuery } = request.all();
+
+  const student = await Student.query()
+    .select('departments.dep_name')
+    .select('students.*')
+    .from('students')
+    .join('departments', 'students.dept_id', '=', 'departments.dep_id')
+    .where(function (query) {
+      query
+      .whereRaw('students.stud_id::text ILIKE ?', `%${searchQuery}%`)
+        .orWhere('students.stud_name', 'ILIKE', `%${searchQuery}%`)
+        .orWhere('departments.dep_name', 'ILIKE', `%${searchQuery}%`)
+        .orWhere('dep_name', 'ILIKE', `%${searchQuery}%`)
+        .whereRaw('students.dept_id::text ILIKE ?', `%${searchQuery}%`)
+    });
+    const result = student.map((s) => {
+      return {
+        stud_id: s.$attributes.stud_id,
+        stud_name: s.$attributes.stud_name,
+        roll_no: s.$attributes.roll_no,
+        dept_id: s.$attributes.dept_id,
+        dept_name: s.$extras.dep_name
+      };
+    });
+  return result
+}
+
+public async displayAllDetailsbySearchandId({ params, request, response }: HttpContextContract) {
+  const { searchQuery } = request.all();
+
+  const student = await Student.query()
+    .select('departments.dep_name')
+    .select('students.*')
+    .from('students')
+    .join('departments', 'students.dept_id', '=', 'departments.dep_id')
+    .where('students.dept_id', params.id)
+    .andWhere(function (query) {
+      query
+      .whereRaw('students.stud_id::text ILIKE ?', `%${searchQuery}%`)
+        .orWhere('students.stud_name', 'ILIKE', `%${searchQuery}%`)
+        .orWhere('departments.dep_name', 'ILIKE', `%${searchQuery}%`)
+        .orWhere('dep_name', 'ILIKE', `%${searchQuery}%`)
+        .whereRaw('students.dept_id::text ILIKE ?', `%${searchQuery}%`)
+    });
+    const result = student.map((s) => {
+      return {
+        stud_id: s.$attributes.stud_id,
+        stud_name: s.$attributes.stud_name,
+        roll_no: s.$attributes.roll_no,
+        dept_id: s.$attributes.dept_id,
+        dept_name: s.$extras.dep_name
+      };
+    });
+  return result
+}
+
+
+
+
+
 }
 

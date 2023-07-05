@@ -72,7 +72,8 @@ public async fetchall({response}:HttpContextContract) {
    public async update({request,response,params}:HttpContextContract) {   
     const newValidator=schema.create({
      stud_name:schema.string(),
-     roll_no:schema.number()
+     roll_no:schema.number(),
+     dept_id:schema.number(),
    })
    const payload=await request.validate({schema:newValidator})
    //return payload 
@@ -80,6 +81,7 @@ public async fetchall({response}:HttpContextContract) {
    if(details_update){
    details_update.stud_name=payload.stud_name
    details_update.roll_no=payload.roll_no
+   details_update.dept_id=payload.dept_id
    await details_update.save()
 
    return response.ok({data:details_update,message:'Record updated Successfully'})

@@ -27,7 +27,7 @@ Route.get('/', async () => {
 })
 
 Route.group(()=>{
-Route.get('/insertstudent','StudentInfoAddsController.create')
+Route.post('/insertstudent','StudentInfoAddsController.create')
 
 Route.get('/Displayall','StudentInfoDisplaysController.fetchall')
 
@@ -39,17 +39,28 @@ Route.delete('/deletebyid/:id','StudentInfoDisplaysController.delete')
 
 Route.get('/insertdirect','StudentInfoDisplaysController.createDirectMethod')
 
-Route.patch('/updatedetails/:id','StudentInfoDisplaysController.update')
+Route.put('/updatedetails/:id','StudentInfoDisplaysController.update')
 
 Route.get('/deptadd','DepartmentDetailsController.addDepartment')
 
 Route.get('/getall','DepartmentDetailsController.displayAllDetails')
 
+Route.get('/dispdept','DepartmentDetailsController.fetchallDept')
+
 Route.patch('/updatedept/:id','DepartmentDetailsController.update')
 
 Route.delete('/deletedept/:id','DepartmentDetailsController.delete')
 
+Route.get('/dispalldept/:id','DepartmentDetailsController.displayAllDetailsbyId')
+
+Route.get('/dispbysearch/','DepartmentDetailsController.displayAllDetailsbySearch')
+
+Route.get('/dispbysearchandid/:id','DepartmentDetailsController.displayAllDetailsbySearchandId')
+
+
 }).middleware('Authenthicate')
+
+
 
 
 
